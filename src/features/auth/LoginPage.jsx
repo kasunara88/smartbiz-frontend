@@ -20,6 +20,9 @@ import { motion } from "framer-motion";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import RegisterPage from "./RegisterPage";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import api from "../api/api";
 
 // --- Style Constants ---
 const colorGrey300 = grey[400];
@@ -83,6 +86,7 @@ function LoginPage() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
@@ -107,22 +111,11 @@ function LoginPage() {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/v1/smartbiz/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        });
-
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(
-            data.message || "Login failed. Please check your credintials"
-          );
+        const result = await api.login(formData.email, formData.password);
+        console.log(result);
+        if (result.success) {
+          navigate("/dashboard");
         }
-        console.log("login sucessfull", data);
       } catch (error) {
         console.log("API Error", error);
         setApiError(error.message);
@@ -317,13 +310,19 @@ function LoginPage() {
                     "Sign In"
                   )}
                 </Button>
-                <Grid container justifyContent="center" sx={{ mt: 3 }}>
+                <Grid
+                  container
+                  justifyContent="center"
+                  sx={{ mt: 3, gap: 1, color: "rgba(255,255,255,0.5)" }}
+                >
+                  Don't have an account?{" "}
                   <Link
-                    href="#"
+                    component={RouterLink}
                     underline="hover"
-                    sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                    sx={{ color: "#60A5FA", "&:hover": { color: "#93C5FD" } }}
+                    to="/register"
                   >
-                    Don't have an account? Sign Up
+                    Sign Up
                   </Link>
                 </Grid>
 

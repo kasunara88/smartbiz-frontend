@@ -30,6 +30,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import api from "../api/api";
 
 // --- Style Constants ---
 const colorGrey400 = grey[400];
@@ -139,6 +141,7 @@ function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,23 +149,18 @@ function RegisterPage() {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/v1/smartbiz/auth/registration", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            password: formData.password,
-          }),
-        });
-
-        const data = await response.json();
-        console.log(data);
-        if (!response.ok) {
-          throw new Error(data.message || "Registration failed");
+        const response = await api.register(
+          formData.firstName,
+          formData.lastName,
+          formData.email,
+          formData.password
+        );
+        if (response.success) {
+          navigate("/login");
+        } else {
+          throw new Error(response.message);
         }
-        console.log("Registration sucessfull", data);
+        console.log("Registration sucessfull");
       } catch (error) {
         setApiError(error.message);
       } finally {
@@ -295,7 +293,8 @@ function RegisterPage() {
                 >
                   Already have an account?
                   <Link
-                    href="#"
+                    component={RouterLink}
+                    to={"/login"}
                     underline="hover"
                     sx={{
                       color: "#60A5FA",
