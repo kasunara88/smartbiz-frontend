@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_BASE_URL = "http://localhost:8080/api/v1/smartbiz";
 
 const api = {
@@ -78,6 +80,30 @@ const api = {
       return { success: false, message: error.message };
     }
   },
+  customerSearch: async (value) => {
+    const res = await axios.get(
+      `${API_BASE_URL}/customers/search?query=${value}`
+    );
+    return res.data;
+  },
+  getAllCustomers: async () => {
+    const res = await axios.get(`${API_BASE_URL}/customers`);
+    return res.data;
+  },
+  addCustomer: async (customerData) => {
+    const res = await axios.post(`${API_BASE_URL}/customers`, customerData);
+    return res.data;
+  },
+  updateCustomer: async (customerId, customerData) => {
+    const res = await axios.put(
+      `${API_BASE_URL}/customers/${customerId}`,
+      customerData
+    );
+    return res.data;
+  },
+  deleteCustomer: async (customerId) => {
+    const res = await axios.delete(`${API_BASE_URL}/customers/${customerId}`);
+    return res.data;
+  },
 };
-
 export default api;

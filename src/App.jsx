@@ -12,6 +12,7 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
 import MainLayout from "./features/MainLayout";
 import DashboardPage from "./features/dashboard/DashboardPage";
+import CustomerPage from "./features/customers/CustomerPage";
 
 const darkTheme = createTheme({
   palette: {
@@ -36,6 +37,7 @@ const ProtectedLayout = (isAuthenticated, onLogout) => {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -44,9 +46,10 @@ function App() {
     }
   }, []);
 
-  const handleLogin = () => {
-    localStorage.setItem("token", "your_token_here");
+  const handleLogin = (newToken) => {
+    localStorage.setItem("token", newToken);
     setIsAuthenticated(true);
+    setToken(newToken);
   };
 
   const handleLogout = () => {
@@ -84,6 +87,7 @@ function App() {
             }
           >
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/customers" element={<CustomerPage />} />
           </Route>
           <Route
             path="*"
@@ -94,9 +98,6 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
-    // <>
-    //   <MainLayout />
-    // </>
   );
 }
 

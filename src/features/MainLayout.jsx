@@ -1,6 +1,6 @@
 import { useState } from "react";
-// import MenuIcon from "@mui/icons-material/Menu";
-import DashboardPage from "./dashboard/DashboardPage";
+import { useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
   AppBar,
@@ -9,22 +9,37 @@ import {
   Typography,
   Drawer,
   Container,
+  IconButton,
+  Avatar,
+  Menu,
+  MenuItem,
+  Tooltip,
 } from "@mui/material";
+import DrawerList from "../components/DrawerList";
 
 const drawerWidth = 240;
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
-const navItems = [
-  { text: "Dashboard", icon: <DashboardPage /> },
-  // { text: "Customers", icon: <People /> },
-  // { text: "Products", icon: <Inventory /> },
-  // { text: "Sales", icon: <Receipt /> },
-  // { text: "Reports", icon: <Assessment /> },
-  // { text: "Settings", icon: <Settings /> },
-];
 
-function MainLayout() {
-  const [anchorElNav, setAnchorElNav] = useState(null);
+function MainLayout({ children }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const onNavigate = (path) => {
+    if (path === "Logout") {
+      navigate("/login");
+    } else {
+      navigate(`/${path.toLowerCase()}`);
+    }
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -40,10 +55,44 @@ function MainLayout() {
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar
+            disableGutters
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
             <Typography variant="h6" noWrap component="div">
               SmartBiz
             </Typography>
+            <Box>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography sx={{ textAlign: "center" }}>
+                      {setting}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
@@ -61,7 +110,17 @@ function MainLayout() {
         }}
         variant="permanent"
         anchor="left"
-      ></Drawer>
+      >
+        <Toolbar />
+        <DrawerList onNavigate={onNavigate} />
+      </Drawer>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, bgcolor: "#0f172a", p: 3, minHeight: "100vh" }}
+      >
+        <Toolbar />
+        {children}
+      </Box>
     </Box>
   );
 }
