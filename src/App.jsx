@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import MainLayout from "./features/MainLayout";
 import DashboardPage from "./features/dashboard/DashboardPage";
 import CustomerPage from "./features/customers/CustomerPage";
+import SupplierPage from "./features/suppliers/SuppliersPage";
 
 const darkTheme = createTheme({
   palette: {
@@ -88,6 +89,7 @@ function App() {
           >
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/customers" element={<CustomerPage />} />
+            <Route path="/suppliers" element={<SupplierPage />} />
           </Route>
           <Route
             path="*"

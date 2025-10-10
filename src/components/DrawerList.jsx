@@ -20,7 +20,7 @@ import {
 const navItems = [
   { text: "Dashboard", icon: <Dashboard /> },
   { text: "Customers", icon: <People /> },
-  { text: "Products", icon: <Inventory /> },
+  { text: "Suppliers", icon: <Inventory /> },
   { text: "Sales", icon: <Receipt /> },
   { text: "Reports", icon: <Assessment /> },
 ];

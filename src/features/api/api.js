@@ -105,5 +105,30 @@ const api = {
     const res = await axios.delete(`${API_BASE_URL}/customers/${customerId}`);
     return res.data;
   },
+  supplierSearch: async (value) => {
+    const res = await axios.get(
+      `${API_BASE_URL}/suppliers/search?query=${value}`
+    );
+    return res.data;
+  },
+  getAllSuppliers: async () => {
+    const res = await axios.get(`${API_BASE_URL}/suppliers`);
+    return res.data;
+  },
+  addSupplier: async (supplierData) => {
+    const res = await axios.post(`${API_BASE_URL}/suppliers`, supplierData);
+    return res.data;
+  },
+  updateSupplier: async (supplierId, supplierData) => {
+    const res = await axios.put(
+      `${API_BASE_URL}/suppliers/${supplierId}`,
+      supplierData
+    );
+    return res.data;
+  },
+  deleteSupplier: async (supplierId) => {
+    const res = await axios.delete(`${API_BASE_URL}/suppliers/${supplierId}`);
+    return res.data;
+  },
 };
 export default api;
