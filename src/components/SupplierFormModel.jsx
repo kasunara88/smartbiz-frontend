@@ -92,7 +92,7 @@ function SupplierFormModal({ open, onClose, onSave, supplier }) {
         <TextField
           margin="dense"
           name="address"
-          label="Address Number"
+          label="Address"
           type="text"
           fullWidth
           variant="outlined"

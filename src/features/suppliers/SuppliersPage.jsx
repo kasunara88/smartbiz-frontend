@@ -79,7 +79,7 @@ function SupplierPage() {
 
   const handleAddSupplier = async (supplierData) => {
     try {
-      await api.addCustomer(supplierData);
+      await api.addSupplier(supplierData);
       setModelOpen(false);
       fetchSuppliers();
     } catch (error) {
@@ -89,27 +89,27 @@ function SupplierPage() {
 
   const handleUpdateSupplier = async (supplierData) => {
     try {
-      await api.updateCustomer(editSupplier.id, supplierData);
+      await api.updateSupplier(editSupplier.id, supplierData);
       setEditSupplier(null);
       setModelOpen(false);
       fetchSuppliers();
     } catch (error) {
-      console.error("Failed to update customer:", error);
+      console.error("Failed to update supplier:", error);
     }
   };
 
-  const handleDeleteRequest = async (customer) => {
-    setSupplierToDelete(customer);
+  const handleDeleteRequest = async (supplier) => {
+    setSupplierToDelete(supplier);
     setDeleteConfirmOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
     if (supplierToDelete) {
       try {
-        await api.deleteCustomer(supplierToDelete.id);
+        await api.deleteSupplier(supplierToDelete.id);
         fetchSuppliers();
       } catch (error) {
-        console.error("Failed to delete customer:", error);
+        console.error("Failed to delete supplier:", error);
       }
     }
     setDeleteConfirmOpen(false);
@@ -168,6 +168,8 @@ function SupplierPage() {
                     <TableCell>{supplier.name}</TableCell>
                     <TableCell>{supplier.email}</TableCell>
                     <TableCell>{supplier.phone}</TableCell>
+                    <TableCell>{supplier.address}</TableCell>
+
                     <TableCell>
                       <IconButton onClick={() => openEditModal(supplier)}>
                         <EditIcon />
@@ -186,7 +188,7 @@ function SupplierPage() {
           open={modelOpen}
           onClose={() => setModelOpen(false)}
           onSave={editSupplier ? handleUpdateSupplier : handleAddSupplier}
-          customer={editSupplier}
+          supplier={editSupplier}
         />
       </Paper>
       <Dialog
